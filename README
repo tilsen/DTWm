@@ -1,44 +1,44 @@
-%This function "dtw-more" or "dtw-matlab" (dtwm) is a Matlab port written 
-%by Sam Tilsen and Mark Tiede of Toni Giorgino's dtw package for python/R.
-% See Giorgino (2009) Computing and Visualizing  Dynamic Time Warping 
-% Alignments in R: The dtw Package.
-%
-%dtwm does more than built-in Matlab dtw: it allows for local slope 
-% constraints, global windows, and partial matching
-%
-%Use: 
-%     dtwm(x1,x2) where x1 and x2 are input signals
-%        
-% or  dtwm(D) where D is a distance matrix
-% 
-% Optional input parameters:
-%
-%   'dist_method':    'euclidean' (default); other methods not yet implemented
-%
-%   'step_pattern':   'symmetric2' (default); see documentation for alternatives
-%
-%   'window_type':    'none' (default), 'SakoeChiba', 'Itakura', 'SlantedBand'
-%
-%   'window_args':    {}; additional arguments for some windows. see
-%                   documentation for examples.
-%
-%   'keep_internals': true (default) or false; keeps some information that might not
-%                   be needed
-%
-%   'open_end':       true or false (default); allow for partial matching at end
-% 
-%   'open_begin':     true or false (default); allow for partial matching at begin
-%
-%   'use_mex':        true (default) or false; use compiled mex file for
-%                   determining optimal warping path. 'false' will be very slow
-%
-% Outputs:
-%
-%   wcurve:     the warping curve
-%
-%   dist:       the distance after alignment
-%
-%   gcm:        additional information, including the global cost matrix
+This function "dtw-more" or "dtw-matlab" (dtwm) is a Matlab port written 
+by Sam Tilsen and Mark Tiede of Toni Giorgino's dtw package for python/R.
+See Giorgino (2009) Computing and Visualizing  Dynamic Time Warping 
+Alignments in R: The dtw Package.
+
+dtwm does more than built-in Matlab dtw: it allows for local slope 
+ constraints, global windows, and partial matching
+
+Use: 
+     dtwm(x1,x2) where x1 and x2 are input signals
+        
+ or  dtwm(D) where D is a distance matrix
+ 
+ Optional input parameters:
+
+   'dist_method':    'euclidean' (default); other methods not yet implemented
+
+   'step_pattern':   'symmetric2' (default); see documentation for alternatives
+
+   'window_type':    'none' (default), 'SakoeChiba', 'Itakura', 'SlantedBand'
+
+   'window_args':    {}; additional arguments for some windows. see
+                   documentation for examples.
+
+   'keep_internals': true (default) or false; keeps some information that might not
+                   be needed
+
+   'open_end':       true or false (default); allow for partial matching at end
+ 
+   'open_begin':     true or false (default); allow for partial matching at begin
+
+   'use_mex':        true (default) or false; use compiled mex file for
+                   determining optimal warping path. 'false' will be very slow
+
+ Outputs:
+
+   wcurve:     the warping curve
+
+   dist:       the distance after alignment
+
+   gcm:        additional information, including the global cost matrix
 
 
 
