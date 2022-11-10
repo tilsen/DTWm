@@ -1,0 +1,95 @@
+%This function "dtw-more" or "dtw-matlab" (dtwm) is a Matlab port written 
+%by Sam Tilsen and Mark Tiede of Toni Giorgino's dtw package for python/R.
+% See Giorgino (2009) Computing and Visualizing  Dynamic Time Warping 
+% Alignments in R: The dtw Package.
+%
+%dtwm does more than built-in Matlab dtw: it allows for local slope 
+% constraints, global windows, and partial matching
+%
+%Use: 
+%     dtwm(x1,x2) where x1 and x2 are input signals
+%        
+% or  dtwm(D) where D is a distance matrix
+% 
+% Optional input parameters:
+%
+%   'dist_method':    'euclidean' (default); other methods not yet implemented
+%
+%   'step_pattern':   'symmetric2' (default); see documentation for alternatives
+%
+%   'window_type':    'none' (default), 'SakoeChiba', 'Itakura', 'SlantedBand'
+%
+%   'window_args':    {}; additional arguments for some windows. see
+%                   documentation for examples.
+%
+%   'keep_internals': true (default) or false; keeps some information that might not
+%                   be needed
+%
+%   'open_end':       true or false (default); allow for partial matching at end
+% 
+%   'open_begin':     true or false (default); allow for partial matching at begin
+%
+%   'use_mex':        true (default) or false; use compiled mex file for
+%                   determining optimal warping path. 'false' will be very slow
+%
+% Outputs:
+%
+%   wcurve:     the warping curve
+%
+%   dist:       the distance after alignment
+%
+%   gcm:        additional information, including the global cost matrix
+
+
+
+%{ 
+The following is from the Python dtw.py function:
+
+If you use this software in academic work, please cite:
+#  * T. Giorgino. Computing and Visualizing Dynamic Time Warping
+#    Alignments in R: The dtw Package. Journal of Statistical
+#    Software, v. 31, Issue 7, p. 1 - 24, aug. 2009. ISSN
+#    1548-7660. doi:10.18637/jss.v031.i07. http://www.jstatsoft.org/v31/i07/
+
+Cost matrices (both input and output) have query elements arranged
+row-wise (first index), and reference elements column-wise (second
+index). They print according to the usual convention, with indexes
+increasing down- and rightwards. Many DTW papers and tutorials show
+matrices according to plot-like conventions, i_e. reference index
+growing upwards. This may be confusing.
+
+References
+----------
+
+1. Toni Giorgino. *Computing and Visualizing Dynamic Time Warping
+   Alignments in R: The dtw Package.* Journal of Statistical Software,
+   31(7), 1-24. http://www.jstatsoft.org/v31/i07/
+2. Tormene, P.; Giorgino, T.; Quaglini, S. & Stefanelli, M. *Matching
+   incomplete time series with dynamic time warping: an algorithm and an
+   application to post-stroke rehabilitation.* Artif Intell Med, 2009,
+   45, 11-34. http://dx.doi.org/10.1016/j.artmed.2008.11.007
+3. Sakoe, H.; Chiba, S., *Dynamic programming algorithm optimization for
+   spoken word recognition,* Acoustics, Speech, and Signal Processing,
+   IEEE Transactions on , vol.26, no.1, pp. 43-49, Feb 1978.
+   http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1163055
+4. Mori, A.; Uchida, S.; Kurazume, R.; Taniguchi, R.; Hasegawa, T. &
+   Sakoe, H. *Early Recognition and Prediction of Gestures* Proc. 18th
+   International Conference on Pattern Recognition ICPR 2006, 2006, 3,
+   560-563
+5. Sakoe, H. *Two-level DP-matching–A dynamic programming-based pattern
+   matching algorithm for connected word recognition* Acoustics, Speech,
+   and Signal Processing, IEEE Transactions on, 1979, 27, 588-595
+6. Rabiner L, Rosenberg A, Levinson S (1978). *Considerations in dynamic
+   time warping algorithms for discrete word recognition.* IEEE Trans.
+   Acoust., Speech, Signal Process., 26(6), 575-582. ISSN 0096-3518.
+7. Muller M. *Dynamic Time Warping* in *Information Retrieval for Music
+   and Motion*. Springer Berlin Heidelberg; 2007. p. 69-84.
+   http://link.springer.com/chapter/10.1007/978-3-540-74048-3_4
+
+%}
+
+
+Please see dtwm_examples.mlx, dtwm_examples.pdf, or dtwm_examples_script for more information
+
+
+
