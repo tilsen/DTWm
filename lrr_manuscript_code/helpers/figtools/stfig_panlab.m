@@ -40,7 +40,7 @@ r = p.Results;
 switch(r.style)
     case 'letter_title'
         th{1} = stfig_panlab(r.ax,[],'xoff',0,'yoff',0.01,'fontsize',r.fontsize,'hori','right','fontweight','bold');
-        th{2} = stfig_panlab(r.ax,r.labs,'xoff',0.02,'yoff',0.02,'fontsize',r.fontsize-2,'hori','left','fontweight','normal');
+        th{2} = stfig_panlab(r.ax,r.labs,'xoff',0.02,'yoff',0.01,'fontsize',r.fontsize-2,'hori','left','fontweight','normal');
         return;
 
     case 'plain_title'

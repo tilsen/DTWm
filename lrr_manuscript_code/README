@@ -1,0 +1,19 @@
+The contents of this directory contain all of the code 
+necessary to conduct the analyses and generate figures of the manuscript:
+Tilsen & Tiede (under review) Looking within events:
+examining internal temporal structure with local relative rate.
+
+Note that the function tw_helpers.m must be edited to specify paths to the input data,
+which are available from an OSF repository described in the manuscript. This function
+also lists some additional toolboxes that are necessary for rnning
+
+The script tw_worklow.m conducts all of the processing steps. Various functions for
+data processing are located in the subdirectory ./processing, and additional helper
+functions are in ./helpers
+
+The script tw_figures.m generates all of the figures in the manuscript. The functions
+for generating each figure are in the subdirectory ./figure_code
+
+The subdirectory ./examples contains livescripts that provide
+additional examples of local relative rate calculation and also linear time warping.
+

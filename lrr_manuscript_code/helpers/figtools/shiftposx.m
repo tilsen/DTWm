@@ -1,7 +1,7 @@
 function [] = shiftposx(obj,shift)
 
 if numel(shift)==1
-    shift = repmat(shift,1,numel(obj));
+    shift = repmat(shift,1,length(obj));
 end
 
 for i=1:numel(obj)
