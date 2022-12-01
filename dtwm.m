@@ -90,6 +90,7 @@ References
 %}
 
 p = inputParser;
+p.KeepUnmatched = 1;
 
 default_dist_method = 'euclidean';
 default_step_pattern = 'symmetric2';

@@ -24,6 +24,7 @@ params = p.Results.params;
 
 %% signal data function handles
 F.lin_rate_var          = @()lin_rate_var(params{:});
+F.lin_rate_var2         = @()lin_rate_var2(params{:});
 F.many_to_many_example  = @()many_to_many_example(params{:});
 F.alignment_example     = @()alignment_example(params{:});
 F.alignment_example2    = @()alignment_example2(params{:});
@@ -343,19 +344,39 @@ S.formula = '$$y=\cos(2\pi f_i t)$$';
 S.labels = arrayfun(@(c,d){sprintf('f_{%i}=%1.2f',c,d)},1:length(S.frq),S.frq);
 
 end
+
 %% linear (1-period) growth rate variation
 function [S] = lin_rate_var(varargin)
 
 p = inputParser;
 def_n = 5;
 addParameter(p,'n',def_n);
-parse(p);
+parse(p,varargin{:});
 n = p.Results.n;
 
 st = dbstack;
 S.name = st.name;
 S.descr = 'linear growth-decay at constant rate';
 S.frq = 1./(linspace(0.5,1,n));
+S.dt = 1e-3;
+
+for i=1:length(S.frq)
+    S.t{i} = (0:S.dt:(1/S.frq(i)));
+    S.X{i} = 1 - 2*S.frq(i)* abs(S.t{i}-(1/(2*S.frq(i))));
+end
+
+S.formula = '$$y=1-2r\bigg|t-\frac{1}{2r}\bigg|$$';
+S.labels = arrayfun(@(c,d){sprintf('r_{%i}=%1.2f',c,d)},1:length(S.frq),S.frq);
+
+end
+
+%% linear (1-period) growth rate variation
+function [S] = lin_rate_var2(varargin)
+
+st = dbstack;
+S.name = st.name;
+S.descr = 'linear growth-decay at constant rate';
+S.frq = [0.5 1 2.0];
 S.dt = 1e-3;
 
 for i=1:length(S.frq)

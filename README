@@ -1,10 +1,13 @@
-This function "dtw-more" or "dtw-matlab" (dtwm) is a Matlab port written 
-by Sam Tilsen and Mark Tiede of Toni Giorgino's dtw package for python/R.
-See Giorgino (2009) Computing and Visualizing  Dynamic Time Warping 
-Alignments in R: The dtw Package.
+This toolbox "dtw-more" or "dtw-matlab" (dtwm) is in part a Matlab port 
+of Toni Giorgino's dtw package for python/R. 
+See: Giorgino (2009) Computing and Visualizing Dynamic Time Warping 
+Alignments in R: The dtw Package. This package was written by Sam Tilsen
+and Mark Tiede.
 
 dtwm does more than built-in Matlab dtw: it allows for local slope 
- constraints, global windows, and partial matching
+ constraints, global windows, and partial matching. It also contains
+ functions for calculation of the local slope of the dtw warping curve,
+ which is equivalent to the local relative rate of one signal to another.
 
 Use: 
      dtwm(x1,x2) where x1 and x2 are input signals

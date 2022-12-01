@@ -1,8 +1,16 @@
 function [map,Xali] = ltwm(X,varargin)
+%ltwm applies linear time warping to a set of 1-d signals, which are input in a
+%cell array, e.g.
+%
+%  [map,Xali] = ltwm(X)
+%
+%  [map,Xali] = ltwm(X,'length',lengthopt)
+%               lengthopt is a target length method: median
+%               (default), mean, mode, or an integer
 
 p = inputParser;
 
-default_length = [];
+default_length = 'median';
 
 validinput = @(c)(isnumeric(c) & numel(c)>1) | iscell(X);
 
@@ -13,9 +21,7 @@ parse(p,X,varargin{:});
 
 r = p.Results;
 
-if isempty(r.length)
-    L = median(cellfun(@(c)length(c),X));
-elseif ischar(r.length)
+if ischar(r.length)
     switch(r.length)
         case 'median'
             L = median(cellfun(@(c)length(c),X));
@@ -23,6 +29,8 @@ elseif ischar(r.length)
             L = round(mean(cellfun(@(c)length(c),X)));
         case 'mode'
             L = mode(cellfun(@(c)length(c),X));
+        otherwise
+            L = median(cellfun(@(c)length(c),X));
     end
 elseif isnumeric(r.length)
     L = round(r.length);

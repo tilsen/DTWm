@@ -1,4 +1,4 @@
-function [a1,a2] = align_signals(map,x_ref,x_test,varargin)
+function [a1,a2,map] = align_signals(map,x_ref,x_test,varargin)
 
 p = inputParser;
 
@@ -28,13 +28,16 @@ switch(r.aligntype)
         map_compressed = map(:,~any(diff([map [0;0]],[],2)==0));
         a1 = x_ref(map_compressed(1,:));
         a2 = x_test(map_compressed(2,:));
+        map = map_compressed;
 
     case 'reference'
         ix1 = unique(map(1,:));
         a1 = x_ref(ix1);
-
+        
         ix2 = arrayfun(@(c)map(2,find(map(1,:)==c,1,'last')),ix1);
         a2 = x_test(ix2);
+
+        map = [ix1; ix2];
 
     otherwise
         fprintf('ERROR: unknown alignment type\n'); return;
