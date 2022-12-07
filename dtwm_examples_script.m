@@ -13,7 +13,11 @@
 % 
 % T. Giorgino. Computing and Visualizing Dynamic Time Warping Alignments in 
 % R: The dtw Package. Journal of Statistical Software, v. 31, Issue 7, p. 1 - 
-% 24, aug. 2009. ISSN 1548-7660. doi:10.18637/jss.v031.i07. http://www.jstatsoft.org/v31/i07/
+% 24, aug. 2009. ISSN 1548-7660. doi:10.18637/jss.v031.i07. <http://www.jstatsoft.org/v31/i07/ 
+% http://www.jstatsoft.org/v31/i07/>
+
+%NOTE: this script should be run with "DTWm" and all of its subdirectories on your path:
+addpath(genpath('.\'));
 % Input: a pair of signals
 % Here is a pair of signals that we wish to align. Each signal is one period 
 % of a cosine, but the frequencies differ: the first (blue) has a frequency of 

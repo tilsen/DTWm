@@ -32,7 +32,7 @@ D = (q'-r).^2;
 h.imh = imagesc(D); hold on;
 axis tight;
 if p.Results.grid
-    h.gridlines = ST_matrix_gridlines(gca,p.Results.gridcolor);
+    h.gridlines = matrix_gridlines(gca,p.Results.gridcolor);
 end
 
 h.mh = plot(map(1,:),map(2,:),'linestyle',p.Results.linestyle, ...
