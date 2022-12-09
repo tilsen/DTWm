@@ -4,7 +4,7 @@
 % for rescaling the temporal coordinate of a signal.
 
 %NOTE: this script should be run with "DTWm" and all of its subdirectories on your path:
-addpath(genpath('..\..\..\DTWm'));
+addpath(genpath(['..' filesep '..' filesep '..' filesep 'DTWm']));
 % Input
 % There are three inputs:
 %% 

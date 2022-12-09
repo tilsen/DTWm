@@ -4,7 +4,7 @@
 % of a set of signals.
 
 %NOTE: this script should be run with "DTWm" and all of its subdirectories on your path:
-addpath(genpath('..\..\..\DTWm'));
+addpath(genpath(['..' filesep '..' filesep '..' filesep 'DTWm']));
 % Input: a set of signals. Linear growth and decay
 % Here is a set of three signals for which we will calculate local relative 
 % rate. Each of these is triangular function, but the periods differ. The parameter 
