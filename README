@@ -9,6 +9,17 @@ dtwm does more than built-in Matlab dtw: it allows for local slope
  functions for calculation of the local slope of the dtw warping curve,
  which is equivalent to the local relative rate of one signal to another.
 
+
+GET STARTED:
+
+Run the livescript dtwm_examples.mlx, or dtwm_examples_script to get started.
+The output of the livescript is published in dtwm_examples.pdf.
+
+
+
+Help for dtwm:
+
+
 Use: 
      dtwm(x1,x2) where x1 and x2 are input signals
         
@@ -92,7 +103,6 @@ References
 %}
 
 
-Please see dtwm_examples.mlx, dtwm_examples.pdf, or dtwm_examples_script for more information
 
 
 
