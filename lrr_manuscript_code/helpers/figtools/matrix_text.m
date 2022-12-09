@@ -43,10 +43,10 @@ if ~isnan(res.color_threshold) && size(res.fontcolor,1)==1
 end
 
 if isnan(res.x)
-    x = 1:size(M,2);
+    res.x = 1:size(M,2);
 end
 if isnan(res.y)
-    y = 1:size(M,1);
+    res.y = 1:size(M,1);
 end
 
 for r=1:size(M,1)
@@ -62,8 +62,6 @@ for r=1:size(M,1)
                 color = res.fontcolor(2,:);
             end       
         end
-
-        
 
         th(r,c) = text(res.x(c),res.y(r),Mstr{r,c},...
             'hori','center', ...
