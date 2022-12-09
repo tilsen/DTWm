@@ -12,7 +12,7 @@ dtwm does more than built-in Matlab dtw: it allows for local slope
 
 GET STARTED:
 
-Run the livescript dtwm_examples.mlx, or dtwm_examples_script to get started.
+1) Run the livescript dtwm_examples.mlx, or dtwm_examples_script to get started.
 The output of the livescript is published in dtwm_examples.pdf.
 
 

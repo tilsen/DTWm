@@ -16,12 +16,11 @@
 % 24, aug. 2009. ISSN 1548-7660. doi:10.18637/jss.v031.i07. <http://www.jstatsoft.org/v31/i07/ 
 % http://www.jstatsoft.org/v31/i07/>
 
-% NOTE: this script should be run with "DTWm" and all of its subdirectories on your path:
+%NOTE: this script should be run with "DTWm" and all of its subdirectories on your path:
 addpath(genpath('.'));
 
 % this compiles the code for computing the cost matrix if necessary
 if ~exist('dtwm_costmatrix'), mex dtwm_costmatrix.c; end
-
 % Input: a pair of signals
 % Here is a pair of signals that we wish to align. Each signal is one period 
 % of a cosine, but the frequencies differ: the first (blue) has a frequency of 
@@ -785,11 +784,50 @@ else
 end
 end
 
+function [axgrid] = stf_axes_grid(nax,varargin)
+
+p = inputParser;
+
+addRequired(p,'nax',@(x)isnumeric(x));
+addParameter(p,'ncols',nan);
+addParameter(p,'nrows',nan);
+addParameter(p,'mincols',nan);
+addParameter(p,'minrows',nan);
+addParameter(p,'maxcols',nan);
+addParameter(p,'maxrows',nan);
+
+parse(p,nax,varargin{:});
+
+r = p.Results;
+
+if isnan(r.ncols) && isnan(r.nrows)
+    
+    if ~isnan(r.mincols) || ~isnan(r.maxcols)
+        r.ncols = min(max(ceil(sqrt(nax)),r.mincols),r.maxcols);
+        r.nrows = ceil(nax/r.ncols);
+    else
+        r.nrows = min(max(ceil(sqrt(nax)),r.minrows),r.maxrows);
+        r.ncols = ceil(nax/r.nrows);
+    end
+
+elseif isnan(r.ncols)
+
+    r.ncols = floor(nax/r.nrows);
+
+elseif isnan(r.nrows)
+
+    r.nrows = floor(nax/r.ncols);
+end
+
+npan = r.ncols*r.nrows;
+axgrid = reshape(1:npan,r.ncols,[]);
+axgrid((nax+1):end) = nan;
+axgrid = axgrid';
+
+end
+
 %% plots global window examples
 function [] = plot_global_windows(maps,map_infos)
-
-
-
 switch(numel(maps))
     case 4
         fig;
@@ -806,8 +844,6 @@ switch(numel(maps))
         ax = gca;
         title_strs = {''};
 end
-
-
 
 for i=1:length(ax)
     stf_matrix(map_infos{i}.costMatrix','textvalues',false, ...
@@ -827,7 +863,6 @@ switch(numel(maps))
 end
 
 end
-
 
 %% plots updates of cost matrix algorithm
 function [] = plot_costmatrix_updates(updates,varargin)
@@ -859,4 +894,283 @@ set(ax,'YDir','normal');
 set(ax(2:end),'XTick',[],'YTick',[]);
 set(ax,'colormap',hot(100),'CLim',[0 max_cost]);
 set(ax(1),'XTick',1:L,'YTick',1:L)
+end
+
+function [h] = stfig_gridlines(xy,varargin)
+
+p = inputParser;
+
+def_xy = 'xy';
+def_parent = gca;
+def_color = [0 0 0];
+def_linewidth = 1;
+def_xvals = nan;
+def_yvals = nan;
+
+addOptional(p,'xy',def_xy,@(x)ischar(x));
+addParameter(p,'parent',def_parent);
+addParameter(p,'color',def_color);
+addParameter(p,'linewidth',def_linewidth);
+addParameter(p,'xvals',def_xvals);
+addParameter(p,'yvals',def_yvals);
+
+parse(p,xy,varargin{:});
+
+axh = p.Results.parent;
+
+X = p.Results.xvals(:)';
+if isnan(X)
+    X = min(axh.XLim):max(axh.XLim);  
+    Xr = axh.XLim;
+else
+    Xr = minmax(X);
+end
+
+nX = length(X);
+
+Y = p.Results.yvals(:)';
+if isnan(Y)
+    Y = min(axh.YLim):max(axh.YLim);
+    Yr = axh.YLim;
+else
+    Yr = minmax(Y);
+end
+nY = length(Y);
+
+h = {};
+if contains(p.Results.xy,'x')
+   h{end+1} = line( repmat(X,2,1), repmat(Yr',1,nX),...
+       'color',p.Results.color,'parent',axh,'linew',p.Results.linewidth);
+end
+if contains(p.Results.xy,'y')
+   h{end+1} = line( repmat(Xr',1,nY), repmat(Y,2,1),...
+       'color',p.Results.color,'parent',axh,'linew',p.Results.linewidth);
+end
+
+end
+
+function [h] = stf_matrix(M,varargin)
+
+dbstop if error;
+p = inputParser;
+
+def_parent = nan;
+def_colormap = parula(1000);
+def_textvalues = true;
+def_formatstr = '%1.2f';
+def_fontsize = get(0,'defaulttextfontSize');
+def_fontcolor = [1 1 1; 0 0 0];
+def_fontweight = 'normal';
+def_colorbar = false;
+def_gridlines = true;
+def_gridline_color = [0 0 0];
+def_ydir = 'reverse';
+def_nan_color = [.5 .5 .5];
+def_hsp_thresh = 127.5;
+def_x = nan;
+def_y = nan;
+
+addRequired(p,'M',@(x)ismatrix(x));
+addParameter(p,'parent',def_parent);
+addParameter(p,'x',def_x);
+addParameter(p,'y',def_y);
+addParameter(p,'colormap',def_colormap);
+addParameter(p,'textvalues',def_textvalues);
+addParameter(p,'formatstr',def_formatstr);
+addParameter(p,'fontsize',def_fontsize);
+addParameter(p,'fontcolor',def_fontcolor);
+addParameter(p,'fontweight',def_fontweight);
+addParameter(p,'colorbar',def_colorbar);
+addParameter(p,'gridlines',def_gridlines);
+addParameter(p,'gridline_color',def_gridline_color);
+addParameter(p,'ydir',def_ydir);
+addParameter(p,'nan_color',def_nan_color);
+addParameter(p,'hsp_thresh',def_hsp_thresh);
+
+parse(p,M,varargin{:});
+
+r = p.Results;
+
+if ~ishandle(r.parent)
+    ax = gca;
+else
+    ax = r.parent;
+end
+
+if isnan(r.x)
+    r.x = 1:size(M,2);
+end
+if isnan(r.y)
+    r.y = 1:size(M,1);
+end
+
+%plot 
+h.imh = imagesc(r.x,r.y,M,'parent',ax); 
+hold(ax,'on');
+
+colormap(ax,r.colormap);
+
+if any(isnan(M),"all")
+    set(h.imh,'AlphaData',~isnan(M));
+    set(ax,'Color',r.nan_color);
+end
+
+set(ax,'YDir',r.ydir);
+
+if r.colorbar
+    h.cbh = colorbar(ax);
+    h.cbh.Position(1) = sum(ax.Position([1 3]))+0.025;
+    %h.cbh.Position(3) = 0.05;
+end
+
+if r.gridlines
+
+    xvals = linspace(min(xlim),max(xlim),size(M,2)+1);
+    yvals = linspace(min(ylim),max(ylim),size(M,1)+1);
+
+    h.gridh = stfig_gridlines('xy', ...
+        'color',r.gridline_color,'xvals',xvals,'yvals',yvals);
+end
+
+if r.textvalues
+    
+    xpnts = h.imh.XData;
+    ypnts = h.imh.YData;
+
+    h.vh = matrix_text(M, ...
+        'formatstr',r.formatstr, ...
+        'fontsize', r.fontsize, ...
+        'fontcolor',r.fontcolor(1,:), ...
+        'fontweight',r.fontweight, ...
+        'parent',r.parent, ...
+        'x',xpnts,...
+        'y',ypnts);
+
+    text_color_threshold(h.imh,h.vh, ...
+        'colors',r.fontcolor, ...
+        'thresholds',r.hsp_thresh);
+end
+
+h.ax = ax;
+
+end
+
+function [th] = matrix_text(M,varargin)
+
+dbstop if error;
+
+p = inputParser;
+
+def_fontsize = get(0,'defaultaxesFontSize');
+def_fontcolor = get(0,'defaultaxesColor');
+def_fontweight = 'normal';
+def_color_threshold = nan;
+def_formatstr = '%1.2f';
+def_parent = nan;
+def_x = nan;
+def_y = nan;
+
+addRequired(p,'M',@(x)ismatrix(x) | iscell(x));
+addParameter(p,'fontsize',def_fontsize);
+addParameter(p,'fontcolor',def_fontcolor);
+addParameter(p,'fontweight',def_fontweight);
+addParameter(p,'color_threshold',def_color_threshold);
+addParameter(p,'formatstr',def_formatstr);
+addParameter(p,'parent',def_parent);
+addParameter(p,'x',def_x);
+addParameter(p,'y',def_y);
+
+parse(p,M,varargin{:});
+
+res = p.Results;
+
+if ~ishandle(res.parent)
+    res.parent = gca;
+end
+
+if ismatrix(M)
+    Mstr = arrayfun(@(c)sprintf(res.formatstr,c),M,'un',0);
+    Mstr(isnan(M)) = {''};
+else
+    Mstr = M;
+end
+
+if ~isnan(res.color_threshold) && size(res.fontcolor,1)==1
+    res.fontcolor = repmat(res.fontcolor,2,1);
+end
+
+if isnan(res.x)
+    res.x = 1:size(M,2);
+end
+if isnan(res.y)
+    res.y = 1:size(M,1);
+end
+
+for r=1:size(M,1)
+    for c=1:size(M,2)
+
+        
+        color = res.fontcolor(1,:);  
+        
+        if ~isnan(res.color_threshold)
+            if M(r,c)<=res.color_threshold
+                color = res.fontcolor(1,:);
+            else
+                color = res.fontcolor(2,:);
+            end       
+        end
+
+        th(r,c) = text(res.x(c),res.y(r),Mstr{r,c},...
+            'hori','center', ...
+            'verti','mid', ...
+            'color',color, ...
+            'fontsize',res.fontsize, ...
+            'fontweight',res.fontweight, ...
+            'parent',res.parent);
+    end
+end
+
+end
+
+function [] = text_color_threshold(imh,th,varargin)
+
+p = inputParser;
+
+def_colors = [0 0 0; 1 1 1];
+def_thresholds = 127.5;
+
+addRequired(p,'imh',@(x)ishandle(imh) && numel(imh.CData)==numel(th));
+addRequired(p,'th',@(x)all(ishandle(th),'all'));
+addParameter(p,'thresholds',def_thresholds);
+addParameter(p,'colors',def_colors);
+
+parse(p,imh,th,varargin{:});
+
+r = p.Results;
+
+if size(r.colors,1)~=(numel(r.thresholds)+1)
+    fprintf('error: number of colors must equal number of thresholds + 1\n');
+    return;
+end
+
+cmap = get(imh.Parent,'Colormap');
+cdata = imh.CData;
+clim = get(imh.Parent,'CLim');
+
+for i=1:numel(cdata)
+    sc = (cdata(i)-clim(1))/range(clim);
+    ix = min(1+floor(sc*size(cmap,1)),size(cmap,1));
+    colors(i,:) = cmap(ix,:);
+end
+
+colors = colors*255;
+
+f = [.299 .587 .114];
+hsp = sqrt(sum(f.*colors.^2,2));
+
+set(th,'color',r.colors(1,:));
+for i=1:length(r.thresholds)
+    set(th(hsp>r.thresholds(i)),'Color',r.colors(i+1,:));
+end
+
 end

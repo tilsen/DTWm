@@ -48,7 +48,9 @@ end
 %check for arrow toolbox:
 artoolbox = which('arrow');
 if isempty(artoolbox)
-    p.Results.mapline = 'none';
+    res.mapline = 'none';
+else
+    res = p.Results;
 end
 
 switch(p.Results.mode)
@@ -95,7 +97,7 @@ for i=1:size(map,2)
     
     PP = scale_connection(PP,0.90);
     
-    switch(p.Results.mapline)
+    switch(res.mapline)
         case 'none'
             h.mh(i) = line(PP(:,1),PP(:,2),'linewidth',2,'color','k');
             
@@ -110,6 +112,21 @@ for i=1:size(map,2)
     
 end
 
+end
+
+function [Ca] = scale_connection(C,f)
+
+%stretches or contracts a line
+muC = mean(C);
+
+%center line at origin
+Cn = C-repmat(muC,2,1);
+
+%scale
+Cn = Cn*f;
+
+%restore position
+Ca = Cn+repmat(muC,2,1);
 
 
 end
