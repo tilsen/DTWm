@@ -31,10 +31,6 @@ Dd.t = Dd.t-mean(Dd.t(1,:));
 
 %% collect plotting info
 
-% leg_strs = {
-%     {'[?ap]','[p^{h}ap]'}
-%     {'[p^{h}a:]', '[p^{h}ap]'}};
-
 leg_strs = {
     {'/ap/','/pap/'}
     {'/pa/', '/pap/'}};
@@ -106,6 +102,66 @@ for i=1:length(P)
 
 end
 
+%% annotations
+bw = 0.005;
+xo = -0.225;
+
+axcix = size(axc,1)-[3 2];
+for i=1:length(axcix)
+    axes(axc(axcix(i))); %#ok<*LAXES> 
+    bh = drawbrace([xo -0.5],[xo 1.5],bw,'Color',P(1).D_smooths.color(i,:),'linew',2);
+    text(min(bh.XData),mean(bh.YData),leg_strs{1}{i},'hori','right','fontsize',h.fs(3));
+end
+
+axcix = size(axc,1)-[1 0];
+for i=1:length(axcix)
+    axes(axc(axcix(i)));
+    bh = drawbrace([xo -0.5],[xo 0.5],bw,'Color',P(1).D_smooths.color(i,:),'linew',2);
+    text(min(bh.XData),mean(bh.YData),leg_strs{1}{i},'hori','right','fontsize',h.fs(3));
+end
+
+xo = -0.35;
+axcix = numel(axc)-[3 2];
+for i=1:length(axcix)
+    axes(axc(axcix(i))); %#ok<*LAXES> 
+    bh = drawbrace([xo -0.5],[xo 1.5],bw,'Color',P(1).D_smooths.color(i,:),'linew',2);
+    text(min(bh.XData),mean(bh.YData),leg_strs{2}{i},'hori','right','fontsize',h.fs(3));
+end
+
+axcix = numel(axc)-[1 0];
+for i=1:length(axcix)
+    axes(axc(axcix(i)));
+    bh = drawbrace([xo -0.5],[xo 0.5],bw,'Color',P(1).D_smooths.color(i,:),'linew',2);
+    text(min(bh.XData),mean(bh.YData),leg_strs{2}{i},'hori','right','fontsize',h.fs(3));
+end
+
+axes(axc(end-3,2));
+xo = -.175; yo = 0;
+phx = plot(xo+[-.03 0],yo*[1 1],'k-'); draw_arrow(phx,1,[0.1 0.01]);
+ath(1) = text(phx.XData(1),phx.YData(1),{'constr.' 'onset'},'hori','right');
+
+xo = -.125; yo = 1;
+phx = plot(xo+[-.03 0],yo*[1 1],'k-'); draw_arrow(phx,1,[0.1 0.01]);
+ath(end+1) = text(phx.XData(1),phx.YData(1),{'vowel' 'onset'},'hori','right');
+
+xo = .025; yo = 0;
+phx = plot(xo+[.030 0],yo*[1 1],'k-'); draw_arrow(phx,1,[0.1 0.01]);
+ath(end+1) = text(phx.XData(1),phx.YData(1),{'release' 'onset'},'hori','left');
+
+xo = .120; yo = 1;
+phx = plot(xo+[.030 0],yo*[1 1],'k-'); draw_arrow(phx,1,[0.1 0.01]);
+ath(end+1) = text(phx.XData(1),phx.YData(1),{'target' 'achievement'},'hori','left');
+
+axes(axc(end-1,2));
+xo = -.125; yo = 0;
+phx = plot(xo+[-.03 0],yo*[1 1],'k-'); draw_arrow(phx,1,[0.1 0.01]);
+ath(end+1) = text(phx.XData(1),phx.YData(1),{'segment' 'boundary'},'hori','right');
+
+set(ath,'fontsize',h.fs(end));
+text_spacing(ath([1 3]),0.85);
+text_spacing(ath([2 4]),0.85);
+text_spacing(ath(end),0.95);
+
 %%
 axis(ax(1:4,:),'tight');
 xlim(ax(1:4,:),plot_trng);
@@ -117,7 +173,7 @@ ylim(ax(3,:),getlims(ax(3,:),'y'));
 ylim(ax(4,:),getlimss(ax(4,:),'y'));
 axrescale(ax(1:4,:),0,0.05);
 
-xlabel(axc(end,1),'time (relative to anchorpoint)','fontsize',h.fs(3));
+xlabel(axc(end,1:2),'time (relative to anchorpoint)','fontsize',h.fs(3));
 
 ylabel(ax(1,1),'LA','FontSize',h.fs(3),'rotation',0,'hori','right','verti','mid');
 ylabel(ax(2,1),'TBy','FontSize',h.fs(3),'rotation',0,'hori','right','verti','mid');
@@ -130,11 +186,11 @@ HH(2).legh.String = leg_strs{2};
 set([HH.legh],'Fontsize',h.fs(3));
 
 %
-labels = {'(i)' '(a)' '(b)' '(c)' '(d)' '(e)' '(iii)' '\alpha' '\beta'};
-axi = [1 1 1 1 1 1 1 2 2];
-axj = [1 1 1 1 1 1 1 1 2];
-times = [-0.35 -0.200   0    0.125    0.250  0.35 0.55 -0.155 0.165];
-yposn = [1 1 .5 .6 .5 .65 .9 0.425 0.375];
+labels = {'(a)' '(b)' '(c)' '(d)' '(e)' '\alpha' '\beta'};
+axi = [1 1 1 1 1 2 2];
+axj = [1 1 1 1 1 1 2];
+times = [-0.200   0    0.125    0.250  0.35 -0.155 0.165];
+yposn = [1 .5 .6 .5 .65 0.425 0.375];
 for i=1:length(labels)
     axes(axc(axi(i)+2,axj(i)));
     lth(i) = text(times(i),min(ylim)+diff(ylim)*yposn(i),labels{i}, ...
@@ -149,11 +205,12 @@ arrayfun(@(c)set(c,'XData',[0 0],'Ydata',ylim(c.Parent),'Linestyle',':','color',
 stfig_panlab(ax(1,:),[],'xoff',0,'hori','right');
 stfig_panlab(ax(1,:),title_strs,'hori','left','xoff',0.025,'fontweight','normal');
 
-stfig_panlab(axc(5),{{'gestural','intervals'}}, ...
-    'verti','top','xoff',-0.075,'hori','left','fontweight','normal','yoff',-1,'fontsize',h.fs(2));
+stbgax;
+text(0.065,axc(end-3,1).Position(2),{'gestural','intervals'},...
+    'rotation',90,'verti','bot','hori','center','fontsize',h.fs(2));
 
-stfig_panlab(axc(7),{'phones'}, ...
-    'verti','top','xoff',-0.075,'hori','left','fontweight','normal','fontsize',h.fs(2));
+text(0.065,axc(end-1,1).Position(2),{'phones'},...
+    'rotation',90,'verti','bot','hori','center','fontsize',h.fs(2));
 
 set(axc(:,2),'YTickLabel',[]);
 axc(end,2).XTickLabel{1} = '';
@@ -177,7 +234,7 @@ end
 
 %%
 
-h.printfig([mfilename]);
+h.printfig(mfilename);
 
 end
 
