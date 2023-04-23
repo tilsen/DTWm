@@ -12,7 +12,19 @@ dtwm does more than built-in Matlab dtw: it allows for local slope
 
 GET STARTED:
 
-1) Run the livescript dtwm_examples.mlx, or dtwm_examples_script to get started.
+1) obtain DTWm-main.zip (this repository) from https://github.com/tilsen
+
+2) extract DTWm-main.zip into a folder
+
+in Matlab:
+
+3) set the working directory to the folder where you extracted the repositories
+
+4) execute addpath(genpath(pwd))
+
+5) if running on other than Windows, cd into DTWm-main and run mex dtwm_costmatrix.c
+
+6) Run the livescript dtwm_examples.mlx, or dtwm_examples_script to get started.
 The output of the livescript is published in dtwm_examples.pdf.
 
 
