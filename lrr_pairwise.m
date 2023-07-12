@@ -1,4 +1,47 @@
 function [local_slopes,distances] = lrr_pairwise(X,varargin)
+% lrr_pairwise conducts a dtw on each pair of input signals and then calculates
+% the local relative rate. 
+% 
+% Input: a one-dimensional cell array of signals. Additional arguments are
+% passed to dtwm, e.g.
+%
+% lrr_pairwise(X,'step_pattern','symmetricP05') - will pass 'step_pattern','symmetricP05' to dtwm.  
+%
+% Output: for N signals, lrr_pairwise outputs an N x N cell array of lrr
+% timeseries, along with a matrix of the corresponding warping distances:
+%
+% [LRR_array,dists] = lrr_pairwise(X);
+%
+% IMPORTANT: the output array of this function (i.e. an array of lrr timeseries)
+% is organized such that ROWS correspond to target (reference) signals 
+% and COLUMNS correspond to comparison (query) signals. 
+% Thus the lrr timeseries in each ROW of the output array will have the same length.
+%
+% Note that in the manuscript: Tilsen & Tiede (2023). Looking within events: 
+% examining internal temporal structure with local relative rate, 
+% the lrr array is depicted such that COLUMNS correspond to target signals 
+% and ROWS correspond to comparison signals. 
+% 
+% Thus the depiction of the lrr array in the manuscript is a
+% transposition of the array that is output by this function. 
+% Another way to express the differences is as follows:
+%
+% This function:
+% for a=1:N
+%   for b=1:N
+%       map = dtwm(X{a},X{b});
+%       LRR{a,b} = lrr(map);
+%   end
+% end
+%
+% LRR array as shown in the manuscript:
+% for a=1:N
+%   for b=1:N
+%       map = dtwm(X{a},X{b});
+%       LRR{b,a} = lrr(map);
+%   end
+% end
+
 
 p = inputParser;
 p.KeepUnmatched = true;
