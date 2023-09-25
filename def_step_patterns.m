@@ -479,6 +479,56 @@ s(end).mx = [
     1, 0, 0, 1];
 s(end).norm = "N";
 
+%%
+%designed to allow very high or low local slope but not 0/inf
+% ## First column: enumerates step patterns.
+% ## Second   	 step in query index
+% ## Third	 step in reference index
+% ## Fourth	 weight if positive, or -1 if starting point
+
+%modeled after symmetricP05:
+% s(end).mx = [...
+%     1, 1, 3, -1;
+%     1, 0, 2, 2;
+%     1, 0, 1, 1;
+%     1, 0, 0, 1;
+%     2, 1, 2, -1;
+%     2, 0, 1, 2;
+%     2, 0, 0, 1;
+%     3, 1, 1, -1;
+%     3, 0, 0, 2;
+%     4, 2, 1, -1;
+%     4, 1, 0, 2;
+%     4, 0, 0, 1;
+%     5, 3, 1, -1;
+%     5, 2, 0, 2;
+%     5, 1, 0, 1;
+%     5, 0, 0, 1];
+
+s(end+1).pattern = 'symmetricP01';
+
+%define steps algorithmically
+mx = [];
+c=1;
+for i=9:-1:1
+    mx = [mx; c 1 i -1]; %#ok<*AGROW> 
+    for j=(i-1):-1:0
+        w=1;
+        if j==(i-1), w=2; end %diagonals            
+        mx = [mx; c 0 j w];        
+    end
+    c=c+1;
+end
+
+%symmetric version by exchanging reference and query dimensions
+mxs = [mx(:,1)+max(mx(:,1)) mx(:,[3 2 4])];
+
+mx = [mx; mxs]; %combine
+mx = mx(1:end-2,:); %remove duplicate last pattern
+
+s(end).mx = mx;
+s(end).norm = "N+M";
+
 %% handle unspecified norms:
 for i=1:length(s)
     if isempty(s(i).norm)
