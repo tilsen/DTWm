@@ -480,6 +480,28 @@ s(end).mx = [
 s(end).norm = "N";
 
 %%
+%generates patterns with local slope constraints:
+%[1/2, 2], [1/3, 3], ..., [1/N, N]
+N = 21;
+for slope=2:N
+    s(end+1) = gen_symmetric_pattern(slope);
+end
+
+
+%% handle unspecified norms:
+for i=1:length(s)
+    if isempty(s(i).norm)
+        s(i).norm = '';
+    end
+end
+
+%%
+s = struct2table(s);
+
+
+end
+
+function [s] = gen_symmetric_pattern(slope)
 %designed to allow very high or low local slope but not 0/inf
 % ## First column: enumerates step patterns.
 % ## Second   	 step in query index
@@ -505,12 +527,12 @@ s(end).norm = "N";
 %     5, 1, 0, 1;
 %     5, 0, 0, 1];
 
-s(end+1).pattern = 'symmetricP01';
+s.pattern = ['symmetricS' num2str(slope)];
 
 %define steps algorithmically
 mx = [];
 c=1;
-for i=9:-1:1
+for i=slope:-1:1
     mx = [mx; c 1 i -1]; %#ok<*AGROW> 
     for j=(i-1):-1:0
         w=1;
@@ -526,18 +548,6 @@ mxs = [mx(:,1)+max(mx(:,1)) mx(:,[3 2 4])];
 mx = [mx; mxs]; %combine
 mx = mx(1:end-2,:); %remove duplicate last pattern
 
-s(end).mx = mx;
-s(end).norm = "N+M";
-
-%% handle unspecified norms:
-for i=1:length(s)
-    if isempty(s(i).norm)
-        s(i).norm = '';
-    end
-end
-
-%%
-s = struct2table(s);
-
-
+s.mx = mx;
+s.norm = "N+M";
 end
