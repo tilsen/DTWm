@@ -1,4 +1,4 @@
-function [local_slopes,distances] = lrr_pairwise(X,varargin)
+function [local_slopes,distances,used_fallback] = lrr_pairwise(X,varargin)
 % lrr_pairwise conducts a dtw on each pair of input signals and then calculates
 % the local relative rate. 
 % 
@@ -48,14 +48,17 @@ p.KeepUnmatched = true;
 
 def_winsize = 0.05;
 def_useparallel = false;
+def_nopath_fallback = true;
 
 addRequired(p,'X');
 addParameter(p,'winsize',def_winsize);
 addParameter(p,'useparallel',def_useparallel);
+addParameter(p,'nopath_fallback',def_nopath_fallback);
 
 parse(p,X,varargin{:});
 
 distances = nan(length(X));
+used_fallback = false(length(X));
 
 dtwm_inputs = {};
 if ~isempty(p.Unmatched)
@@ -68,6 +71,11 @@ if ~isempty(p.Unmatched)
     end
 end
 
+ix_step_pattern = find(strcmp(dtwm_inputs,'step_pattern'));
+if ~isempty(ix_step_pattern)
+    dtwm_inputs_fallback = dtwm_inputs(setdiff(1:numel(dtwm_inputs),ix_step_pattern+(0:1)));
+end
+
 switch(p.Results.useparallel)
     case false
 
@@ -75,6 +83,11 @@ switch(p.Results.useparallel)
         for a=1:length(X)
             for b=1:length(X)
                 [map,distances(a,b)] = dtwm(X{a},X{b}, dtwm_inputs{:});
+
+                if isempty(map)
+                     [map,distances(a,b)] = dtwm(X{a},X{b}, dtwm_inputs_fallback{:});
+                     used_fallback(a,b) = true;
+                end
 
                 %slopes/LRRs of columns (targets) to rows (comparisons)
                 local_slopes{a,b} = lrr(map,'winsize',p.Results.winsize);
@@ -87,6 +100,11 @@ switch(p.Results.useparallel)
             xa = X{a};
             parfor b=1:length(X)
                 [map,distances(a,b)] = dtwm(xa,X{b}, dtwm_inputs{:});
+
+                if isempty(map)
+                     [map,distances(a,b)] = dtwm(X{a},X{b}, dtwm_inputs_fallback{:});
+                     used_fallback(a,b) = true;
+                end                
                 
                 %slopes/LRRs of columns (targets) to rows (comparisons)
                 local_slopes{a,b} = lrr(map,'winsize',p.Results.winsize);
