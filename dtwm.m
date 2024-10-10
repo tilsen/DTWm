@@ -128,7 +128,7 @@ else
         case 'euclidean'
             if ndims(x)==1
                 lm = sqrt((x'-y).^2);
-            elseif ismatrix(x) && size(x,2)>size(x,1)
+            elseif ismatrix(x) %&& size(x,2)>size(x,1)
                 lm = arrayfun(@(c){((x(c,:)'-y(c,:))).^2},(1:size(x,1)));
                 lm = sqrt(sum(cat(3,lm{:}),3));
             else
