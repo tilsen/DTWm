@@ -113,6 +113,7 @@ addParameter(p,'keep_internals',default_keep_internals);
 addParameter(p,'open_end',default_open_end);
 addParameter(p,'open_begin',default_open_begin);
 addParameter(p,'use_mex',default_use_mex);
+addParameter(p,'verbose',true);
 
 parse(p,x,varargin{:});
 y = p.Results.y;
@@ -245,7 +246,9 @@ end
 gcm.distance = gcm.costMatrix(end,gcm.jmin);
 
 if isnan(gcm.distance)
-    fprintf('error: no warping path found compatible with the local constraints\n'); 
+    if p.Results.verbose
+        fprintf('error: no warping path found compatible with the local constraints\n'); 
+    end
     wcurve = [];
     dist = nan;
     return;

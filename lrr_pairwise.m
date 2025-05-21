@@ -68,6 +68,7 @@ if ~isempty(p.Unmatched)
         dtwm_inputs{c} = fn{j}; 
         c=c+1;
         dtwm_inputs{c} = p.Unmatched.(fn{j});
+        c=c+1;
     end
 end
 
