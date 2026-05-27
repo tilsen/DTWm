@@ -4,7 +4,7 @@ s = def_step_patterns;
 
 if nargin>0 
     if ~iscell(pattern)
-        pattern = {pattern};
+        pattern = {char(pattern)};
     end
 
     ix_not_specified = find(~ismember(pattern,s.pattern));
